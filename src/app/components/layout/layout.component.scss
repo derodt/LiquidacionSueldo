@@ -19,15 +19,17 @@
     
     // Ajustar padding según el estado del sidebar
     @media (min-width: 769px) {
-      padding-right: 320px; // Ancho del sidebar expandido
+      padding-left: 320px; // Ancho del sidebar expandido
+      padding-right: 0;
       
       .sidebar-container.collapsed + & {
-        padding-right: 72px; // Ancho del sidebar colapsado
+        padding-left: 72px; // Ancho del sidebar colapsado
       }
     }
     
     @media (max-width: 768px) {
-      padding-right: 0; // En móvil no hay padding porque el sidebar se sobrepone
+      padding-left: 0; // En móvil no hay padding porque el sidebar se sobrepone
+      padding-right: 0;
       height: 100vh;
       // Asegurar que pueda hacer scroll en mobile
       -webkit-overflow-scrolling: touch;

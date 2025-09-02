@@ -1,11 +1,13 @@
-import { Component, inject, OnDestroy } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { Router } from '@angular/router';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { Router, NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sidebar',
@@ -16,16 +18,19 @@ import { Router } from '@angular/router';
     MatListModule,
     MatIconModule,
     MatButtonModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatTooltipModule
   ],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnDestroy {
+export class SidebarComponent implements OnInit, OnDestroy {
   public router = inject(Router);
   
   isCollapsed = false;
   isMobile = false;
+  activeRoute = '';
+  private resizeTimeout: any;
 
   menuItems = [
     {
@@ -56,51 +61,103 @@ export class SidebarComponent implements OnDestroy {
 
   constructor() {
     this.checkScreenSize();
-    window.addEventListener('resize', () => this.checkScreenSize());
+    this.setActiveRoute();
+    
+    // En desktop, mostrar el sidebar por defecto
+    if (!this.isMobile) {
+      this.isCollapsed = false;
+    }
+  }
+
+  ngOnInit() {
+    // Escuchar cambios de ruta
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.setActiveRoute();
+    });
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: any) {
+    // Debounce para optimizar rendimiento
+    clearTimeout(this.resizeTimeout);
+    this.resizeTimeout = setTimeout(() => {
+      this.checkScreenSize();
+    }, 150);
+  }
+
+  private setActiveRoute() {
+    this.activeRoute = this.router.url;
   }
 
   checkScreenSize() {
+    const previousMobile = this.isMobile;
     this.isMobile = window.innerWidth <= 768;
-    if (this.isMobile) {
+    
+    // Si cambió de desktop a móvil, colapsar automáticamente
+    if (!previousMobile && this.isMobile) {
       this.isCollapsed = true;
+    }
+    // Si cambió de móvil a desktop, expandir automáticamente
+    else if (previousMobile && !this.isMobile) {
+      this.isCollapsed = false;
+      this.closeSidebar(); // Limpiar estilos de móvil
     }
   }
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
     
-    // En móvil, agregar/quitar clase al body para controlar el scroll
-    if (this.isMobile) {
-      if (!this.isCollapsed) {
-        document.body.classList.add('sidebar-open');
-        document.body.style.overflow = 'hidden';
-      } else {
-        document.body.classList.remove('sidebar-open');
-        document.body.style.overflow = 'auto';
-      }
-    }
+    // En móvil, controlar el scroll del body
+    this.updateBodyScrollState();
   }
 
   navigateTo(route: string) {
     this.router.navigate([route]);
+    
     // En móvil, cerrar el menú después de navegar
     if (this.isMobile) {
-      this.closeSidebar();
+      setTimeout(() => {
+        this.closeSidebar();
+      }, 100);
     }
   }
 
   closeSidebar() {
     if (this.isMobile) {
       this.isCollapsed = true;
-      document.body.classList.remove('sidebar-open');
-      document.body.style.overflow = 'auto';
     }
+    this.updateBodyScrollState();
+  }
+
+  private updateBodyScrollState() {
+    if (this.isMobile) {
+      if (!this.isCollapsed) {
+        document.body.classList.add('sidebar-open');
+        document.body.style.overflow = 'hidden';
+      } else {
+        document.body.classList.remove('sidebar-open');
+        document.body.style.overflow = '';
+      }
+    } else {
+      document.body.classList.remove('sidebar-open');
+      document.body.style.overflow = '';
+    }
+  }
+
+  isRouteActive(route: string): boolean {
+    return this.activeRoute === route || this.activeRoute.startsWith(route + '/');
   }
   
   ngOnDestroy() {
     // Limpiar estilos del body al destruir el componente
     document.body.classList.remove('sidebar-open');
-    document.body.style.overflow = 'auto';
-    window.removeEventListener('resize', () => this.checkScreenSize());
+    document.body.style.overflow = '';
+    
+    // Limpiar timeout
+    if (this.resizeTimeout) {
+      clearTimeout(this.resizeTimeout);
+    }
   }
 }

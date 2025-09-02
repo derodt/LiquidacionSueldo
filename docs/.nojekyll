@@ -1,3 +1,0 @@
-# GitHub Pages deployment
-
-Para que GitHub Pages funcione correctamente con una aplicación Angular, la carpeta `docs` debe contener el resultado del build de producción. Además, es recomendable agregar un archivo `.nojekyll` para evitar problemas con rutas y recursos.

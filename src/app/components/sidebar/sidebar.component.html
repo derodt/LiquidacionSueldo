@@ -1,10 +1,13 @@
 <div class="sidebar-container" [class.collapsed]="isCollapsed" [class.mobile]="isMobile">
-  <!-- Botón toggle para móvil -->
+  <!-- Botón toggle -->
   <button 
     mat-icon-button 
     class="toggle-btn"
     (click)="toggleSidebar()"
-    [class.mobile-toggle]="isMobile">
+    [class.mobile-toggle]="isMobile"
+    [attr.aria-label]="isCollapsed ? 'Abrir menú' : 'Cerrar menú'"
+    [matTooltip]="isCollapsed ? 'Abrir menú' : 'Cerrar menú'"
+    [matTooltipPosition]="'right'">
     <mat-icon>{{ isCollapsed ? 'menu' : 'close' }}</mat-icon>
   </button>
 
@@ -32,19 +35,16 @@
           *ngFor="let item of menuItems" 
           class="nav-item"
           (click)="navigateTo(item.route)"
-          [class.active]="router.url === item.route">
+          [class.active]="isRouteActive(item.route)"
+          [matTooltip]="isCollapsed ? item.label + ' - ' + item.description : ''"
+          [matTooltipPosition]="'right'"
+          [matTooltipDisabled]="!isCollapsed">
           
           <mat-icon matListIcon>{{ item.icon }}</mat-icon>
           
           <div matListContent class="nav-content" *ngIf="!isCollapsed">
             <span class="nav-label">{{ item.label }}</span>
             <span class="nav-description">{{ item.description }}</span>
-          </div>
-          
-          <!-- Tooltip para modo colapsado -->
-          <div class="tooltip" *ngIf="isCollapsed">
-            <strong>{{ item.label }}</strong>
-            <small>{{ item.description }}</small>
           </div>
         </mat-list-item>
       </mat-nav-list>
