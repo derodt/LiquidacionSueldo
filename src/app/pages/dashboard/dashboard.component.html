@@ -1,0 +1,80 @@
+<div class="dashboard-container">
+  <h1>Sistema de Liquidación de Sueldos</h1>
+  
+  <div class="dashboard-grid">
+    <mat-card class="dashboard-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>calendar_today</mat-icon>
+          Agenda de Turnos
+        </mat-card-title>
+        <mat-card-subtitle>
+          Gestión de turnos mensuales
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <app-agenda 
+          [instalacionId]="instalacionId"
+          [anio]="currentYear"
+          [mes]="currentMonth"
+          (agendaChanged)="onAgendaChanged($event)"
+          (turnoAssigned)="onTurnoAssigned($event)">
+        </app-agenda>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="dashboard-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>group</mat-icon>
+          Trabajadores
+        </mat-card-title>
+        <mat-card-subtitle>
+          Gestión de personal
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Módulo de trabajadores en desarrollo</p>
+        <button mat-raised-button color="primary" disabled>
+          Ver Trabajadores
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="dashboard-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>receipt</mat-icon>
+          Liquidaciones
+        </mat-card-title>
+        <mat-card-subtitle>
+          Cálculo de sueldos
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Módulo de liquidaciones en desarrollo</p>
+        <button mat-raised-button color="accent" disabled>
+          Generar Liquidaciones
+        </button>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="dashboard-card">
+      <mat-card-header>
+        <mat-card-title>
+          <mat-icon>business</mat-icon>
+          Empresas
+        </mat-card-title>
+        <mat-card-subtitle>
+          Gestión empresarial
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Módulo de empresas en desarrollo</p>
+        <button mat-raised-button color="warn" disabled>
+          Ver Empresas
+        </button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

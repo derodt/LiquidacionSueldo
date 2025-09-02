@@ -1,0 +1,397 @@
+.menu-contextual-overlay {
+  position: fixed;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  border: 1px solid #e0e0e0;
+  width: 320px;
+  max-height: 500px;
+  overflow-y: auto;
+  z-index: 1000;
+  opacity: 0;
+  transform: scale(0.95) translateY(-10px);
+  transition: all 0.2s ease-out;
+
+  &.show {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+
+  .menu-header {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    background: linear-gradient(135deg, #f5f5f5 0%, #eeeeee 100%);
+    border-radius: 12px 12px 0 0;
+
+    mat-icon {
+      color: #1976d2;
+      margin-right: 12px;
+    }
+
+    .trabajador-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+
+      .nombre {
+        font-weight: 600;
+        font-size: 16px;
+        color: #333;
+        margin-bottom: 2px;
+      }
+
+      .fecha {
+        font-size: 14px;
+        color: #666;
+        text-transform: capitalize;
+      }
+    }
+
+    .close-btn {
+      width: 32px;
+      height: 32px;
+
+      mat-icon {
+        font-size: 18px;
+        width: 18px;
+        height: 18px;
+        margin: 0;
+        color: #666;
+      }
+    }
+  }
+
+  .turno-actual {
+    padding: 16px;
+
+    .turno-info {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+
+      mat-icon {
+        margin-right: 12px;
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+      }
+
+      .turno-detalles {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .tipo {
+          font-weight: 600;
+          font-size: 16px;
+          color: #333;
+          margin-bottom: 2px;
+        }
+
+        .horario {
+          font-size: 14px;
+          color: #666;
+          margin-bottom: 2px;
+        }
+
+        .perfil {
+          font-size: 12px;
+          color: #999;
+          background: #f5f5f5;
+          padding: 2px 8px;
+          border-radius: 12px;
+          align-self: flex-start;
+        }
+      }
+    }
+
+    .turno-acciones {
+      display: flex;
+      gap: 8px;
+
+      button {
+        flex: 1;
+        height: 36px;
+
+        mat-icon {
+          margin-right: 4px;
+          font-size: 18px;
+          width: 18px;
+          height: 18px;
+        }
+      }
+    }
+  }
+
+  .opciones-rapidas {
+    padding: 16px;
+
+    .seccion-titulo {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+
+      mat-icon {
+        color: #4caf50;
+        margin-right: 8px;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+
+      span {
+        font-weight: 600;
+        color: #333;
+      }
+    }
+
+    .opciones-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+
+      .opcion-turno {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        border-left: 4px solid transparent;
+        text-align: left;
+        transition: all 0.2s ease;
+        min-height: 64px;
+
+        &:hover {
+          background: #f9f9f9;
+          border-color: #ccc;
+          transform: translateX(4px);
+        }
+
+        mat-icon {
+          margin-right: 12px;
+          font-size: 24px;
+          width: 24px;
+          height: 24px;
+        }
+
+        .opcion-info {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+
+          .nombre {
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+            margin-bottom: 2px;
+          }
+
+          .horario {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 2px;
+          }
+
+          .descripcion {
+            font-size: 12px;
+            color: #999;
+          }
+        }
+      }
+    }
+  }
+
+  .opciones-avanzadas {
+    padding: 16px;
+
+    .opcion-avanzada {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      text-align: left;
+      margin-bottom: 8px;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: #f9f9f9;
+        border-color: #1976d2;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+
+      > mat-icon:first-child {
+        color: #1976d2;
+        margin-right: 12px;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+
+      .opcion-info {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+
+        .nombre {
+          font-weight: 500;
+          font-size: 14px;
+          color: #333;
+          margin-bottom: 2px;
+        }
+
+        .descripcion {
+          font-size: 12px;
+          color: #666;
+        }
+      }
+
+      .chevron {
+        color: #999;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+  }
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  z-index: 999;
+}
+
+// Responsive design
+@media (max-width: 480px) {
+  .menu-contextual-overlay {
+    width: 280px;
+    max-height: 70vh;
+
+    .menu-header {
+      padding: 12px;
+
+      .trabajador-info {
+        .nombre {
+          font-size: 14px;
+        }
+
+        .fecha {
+          font-size: 12px;
+        }
+      }
+    }
+
+    .opciones-rapidas,
+    .opciones-avanzadas,
+    .turno-actual {
+      padding: 12px;
+    }
+
+    .opciones-grid {
+      .opcion-turno {
+        padding: 8px;
+        min-height: 56px;
+
+        mat-icon {
+          font-size: 20px;
+          width: 20px;
+          height: 20px;
+        }
+
+        .opcion-info {
+          .nombre {
+            font-size: 13px;
+          }
+
+          .horario {
+            font-size: 12px;
+          }
+
+          .descripcion {
+            font-size: 11px;
+          }
+        }
+      }
+    }
+  }
+}
+
+// Animaciones
+@keyframes menuSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes menuSlideOut {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+  }
+}
+
+// Estilos para dark mode (futuro)
+@media (prefers-color-scheme: dark) {
+  .menu-contextual-overlay {
+    background: #424242;
+    border-color: #616161;
+    color: white;
+
+    .menu-header {
+      background: linear-gradient(135deg, #616161 0%, #424242 100%);
+
+      .trabajador-info {
+        .nombre {
+          color: white;
+        }
+
+        .fecha {
+          color: #bbb;
+        }
+      }
+    }
+
+    .opciones-rapidas,
+    .opciones-avanzadas {
+      .opcion-turno,
+      .opcion-avanzada {
+        border-color: #616161;
+        color: white;
+
+        &:hover {
+          background: #616161;
+        }
+
+        .opcion-info {
+          .nombre {
+            color: white;
+          }
+
+          .descripcion,
+          .horario {
+            color: #bbb;
+          }
+        }
+      }
+    }
+  }
+}

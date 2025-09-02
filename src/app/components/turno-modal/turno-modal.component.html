@@ -1,0 +1,222 @@
+<div class="turno-modal">
+  <!-- Header mejorado -->
+  <div mat-dialog-title class="modal-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <mat-icon>schedule</mat-icon>
+      </div>
+      <div class="header-info">
+        <h2>{{ data.esEdicion ? 'Editar Turno' : 'Nuevo Turno' }}</h2>
+        <div class="worker-info">
+          <mat-icon>person</mat-icon>
+          <span class="worker-name">{{ data.trabajador.nombreCompleto }}</span>
+        </div>
+        <div class="date-info">
+          <mat-icon>event</mat-icon>
+          <span class="date-text">{{ fechaFormateada }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <mat-dialog-content class="modal-content">
+    <form [formGroup]="turnoForm" class="turno-form">
+      
+      <!-- Sección: Tipo de Turno -->
+      <div class="form-card">
+        <div class="card-header">
+          <mat-icon>access_time</mat-icon>
+          <h3>Tipo de Asignación</h3>
+        </div>
+        <div class="card-content">
+          <mat-radio-group formControlName="esCompleto" (change)="onEsCompletoChange()" class="turno-type-selector">
+            <mat-radio-button [value]="true" class="type-option complete-shift">
+              <div class="option-content">
+                <div class="option-icon">
+                  <mat-icon>schedule</mat-icon>
+                </div>
+                <div class="option-details">
+                  <h4>Turno Completo</h4>
+                  <p>12 horas consecutivas</p>
+                  <small>Diurno (7:00-19:00) o Nocturno (19:00-7:00)</small>
+                </div>
+              </div>
+            </mat-radio-button>
+            
+            <mat-radio-button [value]="false" class="type-option custom-hours">
+              <div class="option-content">
+                <div class="option-icon">
+                  <mat-icon>more_time</mat-icon>
+                </div>
+                <div class="option-details">
+                  <h4>Horas Específicas</h4>
+                  <p>Horario personalizado</p>
+                  <small>Selecciona inicio y fin del turno</small>
+                </div>
+              </div>
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+
+      <!-- Configuración de Turno Completo -->
+      <div class="form-card" *ngIf="esCompletoControl">
+        <div class="card-header">
+          <mat-icon>wb_sunny</mat-icon>
+          <h3>Configuración de Turno</h3>
+        </div>
+        <div class="card-content">
+          <mat-form-field appearance="outline" class="shift-selector">
+            <mat-label>Tipo de Turno</mat-label>
+            <mat-select formControlName="tipoTurno" (selectionChange)="onTipoTurnoChange()">
+              <mat-option value="DIURNO" class="shift-option diurno">
+                <div class="shift-content">
+                  <mat-icon>wb_sunny</mat-icon>
+                  <div class="shift-details">
+                    <span class="shift-name">Turno Diurno</span>
+                    <span class="shift-time">7:00 AM - 7:00 PM</span>
+                  </div>
+                </div>
+              </mat-option>
+              <mat-option value="NOCTURNO" class="shift-option nocturno">
+                <div class="shift-content">
+                  <mat-icon>brightness_2</mat-icon>
+                  <div class="shift-details">
+                    <span class="shift-name">Turno Nocturno</span>
+                    <span class="shift-time">7:00 PM - 7:00 AM</span>
+                  </div>
+                </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <div class="schedule-preview">
+            <div class="preview-content">
+              <mat-icon>timer</mat-icon>
+              <div class="preview-details">
+                <span class="preview-time">
+                  {{ tipoTurnoControl === 'DIURNO' ? '7:00 AM - 7:00 PM' : '7:00 PM - 7:00 AM' }}
+                </span>
+                <span class="preview-duration">12 horas consecutivas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Configuración de Horas Específicas -->
+      <div class="form-card" *ngIf="!esCompletoControl">
+        <div class="card-header">
+          <mat-icon>schedule</mat-icon>
+          <h3>Horario Personalizado</h3>
+        </div>
+        <div class="card-content">
+          <div class="time-inputs-grid">
+            <mat-form-field appearance="outline" class="time-input">
+              <mat-label>Hora de Inicio</mat-label>
+              <input matInput formControlName="horaInicio" placeholder="HH:MM" type="time"
+                     (change)="onHoraChange()">
+              <mat-icon matSuffix>schedule</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="time-input">
+              <mat-label>Hora de Fin</mat-label>
+              <input matInput formControlName="horaFin" placeholder="HH:MM" type="time"
+                     (change)="onHoraChange()">
+              <mat-icon matSuffix>schedule</mat-icon>
+            </mat-form-field>
+          </div>
+
+          <div class="duration-summary">
+            <div class="summary-content">
+              <mat-icon>timer</mat-icon>
+              <div class="summary-details">
+                <span class="duration-label">Duración Total</span>
+                <span class="duration-value">{{ turnoForm.get('totalHoras')?.value || 0 }} horas</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección: Perfil Laboral -->
+      <div class="form-card">
+        <div class="card-header">
+          <mat-icon>badge</mat-icon>
+          <h3>Perfil Laboral</h3>
+        </div>
+        <div class="card-content">
+          <div class="primary-profile-info" *ngIf="data.trabajador.perfilPrimario">
+            <div class="profile-badge">
+              <mat-icon>star</mat-icon>
+              <span>Perfil Primario</span>
+            </div>
+            <span class="profile-name">{{ data.trabajador.perfilPrimario.nombre }}</span>
+          </div>
+          
+          <mat-form-field appearance="outline" class="profile-selector">
+            <mat-label>Seleccionar Perfil para este Turno</mat-label>
+            <mat-select formControlName="perfilId">
+              <mat-option *ngFor="let perfil of perfilesDisponibles" [value]="perfil.id"
+                          [class.primary-option]="perfil.id === data.trabajador.perfilPrimario?.id">
+                <div class="profile-option">
+                  <div class="profile-header">
+                    <div class="profile-name-section">
+                      <span class="profile-title">{{ perfil.nombre }}</span>
+                      <mat-icon *ngIf="perfil.id === data.trabajador.perfilPrimario?.id" 
+                               class="primary-icon">star</mat-icon>
+                    </div>
+                    <span class="profile-rate">${{ perfil.valorHora | number:'1.0-0' }}/h</span>
+                  </div>
+                  <p class="profile-description">{{ perfil.descripcion }}</p>
+                </div>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Sección: Observaciones -->
+      <div class="form-card">
+        <div class="card-header">
+          <mat-icon>note_add</mat-icon>
+          <h3>Observaciones</h3>
+          <span class="optional-label">(Opcional)</span>
+        </div>
+        <div class="card-content">
+          <mat-form-field appearance="outline" class="notes-field">
+            <mat-label>Notas adicionales</mat-label>
+            <textarea matInput formControlName="observaciones" rows="3" 
+                      placeholder="Agregar información adicional sobre este turno..."></textarea>
+            <mat-icon matSuffix>edit_note</mat-icon>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </form>
+  </mat-dialog-content>
+
+  <!-- Actions mejoradas -->
+  <mat-dialog-actions class="modal-actions">
+    <div class="actions-container">
+      <div class="actions-left">
+        <button mat-button color="warn" *ngIf="data.esEdicion" (click)="onEliminar()" class="delete-btn">
+          <mat-icon>delete_outline</mat-icon>
+          <span>Eliminar Turno</span>
+        </button>
+      </div>
+      
+      <div class="actions-right">
+        <button mat-button (click)="onCancel()" class="cancel-btn">
+          <span>Cancelar</span>
+        </button>
+        <button mat-raised-button color="primary" 
+                [disabled]="!turnoForm.valid"
+                (click)="onSave()" class="save-btn">
+          <mat-icon>{{ data.esEdicion ? 'update' : 'add_task' }}</mat-icon>
+          <span>{{ data.esEdicion ? 'Actualizar' : 'Asignar Turno' }}</span>
+        </button>
+      </div>
+    </div>
+  </mat-dialog-actions>
+</div>

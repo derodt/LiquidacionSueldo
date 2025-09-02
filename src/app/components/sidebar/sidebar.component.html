@@ -1,0 +1,63 @@
+<div class="sidebar-container" [class.collapsed]="isCollapsed" [class.mobile]="isMobile">
+  <!-- Botón toggle para móvil -->
+  <button 
+    mat-icon-button 
+    class="toggle-btn"
+    (click)="toggleSidebar()"
+    [class.mobile-toggle]="isMobile">
+    <mat-icon>{{ isCollapsed ? 'menu' : 'close' }}</mat-icon>
+  </button>
+
+  <!-- Overlay para móvil - solo cuando está abierto -->
+  <div 
+    class="sidebar-overlay" 
+    *ngIf="isMobile && !isCollapsed"
+    (click)="closeSidebar()"
+    (touchstart)="closeSidebar()">
+  </div>
+
+  <!-- Contenido del sidebar -->
+  <nav class="sidebar-content" [class.collapsed]="isCollapsed">
+    <div class="sidebar-header">
+      <div class="logo-section" *ngIf="!isCollapsed">
+        <mat-icon class="logo-icon">business_center</mat-icon>
+        <h3 class="app-title">Sistema de Liquidación</h3>
+      </div>
+      <mat-icon class="logo-icon-collapsed" *ngIf="isCollapsed">business_center</mat-icon>
+    </div>
+
+    <div class="menu-section">
+      <mat-nav-list class="nav-list">
+        <mat-list-item 
+          *ngFor="let item of menuItems" 
+          class="nav-item"
+          (click)="navigateTo(item.route)"
+          [class.active]="router.url === item.route">
+          
+          <mat-icon matListIcon>{{ item.icon }}</mat-icon>
+          
+          <div matListContent class="nav-content" *ngIf="!isCollapsed">
+            <span class="nav-label">{{ item.label }}</span>
+            <span class="nav-description">{{ item.description }}</span>
+          </div>
+          
+          <!-- Tooltip para modo colapsado -->
+          <div class="tooltip" *ngIf="isCollapsed">
+            <strong>{{ item.label }}</strong>
+            <small>{{ item.description }}</small>
+          </div>
+        </mat-list-item>
+      </mat-nav-list>
+    </div>
+
+    <div class="sidebar-footer" *ngIf="!isCollapsed">
+      <div class="user-info">
+        <mat-icon>account_circle</mat-icon>
+        <div class="user-details">
+          <span class="user-name">Admin</span>
+          <span class="user-role">Administrador</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+</div>

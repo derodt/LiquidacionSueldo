@@ -1,0 +1,1274 @@
+// Anular estilos problemáticos generados por Angular
+:host {
+  display: block;
+  height: auto !important;
+  min-height: 100vh;
+  overflow: visible !important;
+}
+
+// Corregir contenedor de agenda específicamente
+.agenda-page-container,
+:host::ng-deep .agenda-page-container,
+:host-context(.agenda-page-container),
+[class*="agenda-page-container"] {
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow: visible !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+// Corregir cualquier contenedor padre que pueda estar bloqueando
+:host::ng-deep [class*="_ngcontent"] {
+  height: auto !important;
+  overflow: visible !important;
+}
+
+// Regla específica para el contenedor que mencionaste
+::ng-deep .agenda-page-container[class*="_ngcontent"] {
+  height: auto !important;
+  overflow: visible !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+.agenda-container {
+  padding: 20px;
+  min-height: calc(100vh - 40px);
+  position: relative;
+  overflow-x: hidden;
+  z-index: 1;
+  height: auto !important;
+  
+  // Cuando el sidebar está abierto en mobile
+  &.sidebar-open {
+    @media (max-width: 768px) {
+      overflow: hidden;
+      pointer-events: none;
+      
+      .mobile-view {
+        pointer-events: none;
+      }
+    }
+  }
+  
+  // Responsivo para pantallas pequeñas
+  @media (max-width: 768px) {
+    padding: 12px;
+    min-height: calc(100vh - 24px);
+    // Mejorar scroll en mobile
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  @media (max-width: 480px) {
+    padding: 8px;
+    min-height: calc(100vh - 16px);
+    // Asegurar que el contenido pueda hacer scroll
+    height: auto;
+    overflow-x: hidden;
+  }
+  
+  .agenda-header {
+    margin-bottom: 20px;
+    
+    mat-card-header {
+      margin-bottom: 16px;
+    }
+  }
+
+  // Estilos para la sección de selección de trabajadores
+  .trabajador-selector {
+    margin-bottom: 20px;
+    
+    @media (max-width: 768px) {
+      margin-bottom: 16px;
+    }
+    
+    .selector-container {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 12px;
+      
+      @media (max-width: 768px) {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+      
+      @media (max-width: 480px) {
+        gap: 8px;
+      }
+      
+      .trabajador-select {
+        flex: 1;
+        max-width: 400px;
+        
+        @media (max-width: 768px) {
+          max-width: 100%;
+        }
+      }
+    }
+    
+    .trabajadores-info {
+      small {
+        color: #666;
+        font-style: italic;
+      }
+    }
+  }
+  
+  .loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    
+    mat-spinner {
+      margin-bottom: 16px;
+    }
+  }
+  
+  .agenda-table-container {
+    margin-bottom: 20px;
+    overflow-x: auto;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    
+    // Responsivo para pantallas pequeñas
+    @media (max-width: 768px) {
+      margin-bottom: 16px;
+      border-radius: 4px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+    
+    @media (max-width: 480px) {
+      margin-bottom: 12px;
+      overflow-x: scroll;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 4px;
+    }
+    
+    .agenda-table {
+      width: 100%;
+      min-width: 800px;
+      border-collapse: collapse;
+      border: 1px solid #e0e0e0;
+      
+      @media (max-width: 1024px) {
+        min-width: 700px;
+      }
+      
+      @media (max-width: 768px) {
+        min-width: 600px;
+        font-size: 12px;
+      }
+      
+      @media (max-width: 480px) {
+        min-width: 500px;
+        font-size: 11px;
+      }
+      
+      // Delinear todas las celdas
+      td, th {
+        border: 1px solid #e0e0e0;
+        margin: 0;
+        padding: 0;
+      }
+      
+      .trabajador-header {
+        position: sticky;
+        left: 0;
+        background: #f5f5f5;
+        z-index: 2;
+        width: 250px;
+        max-width: 250px;
+        font-weight: bold;
+        border-right: 2px solid #ccc;
+        padding: 8px;
+        
+        @media (max-width: 768px) {
+          width: 200px;
+          max-width: 200px;
+          padding: 6px;
+        }
+        
+        @media (max-width: 480px) {
+          width: 160px;
+          max-width: 160px;
+          padding: 4px;
+        }
+        
+        .header-content {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          
+          @media (max-width: 768px) {
+            gap: 6px;
+          }
+          
+          @media (max-width: 480px) {
+            gap: 4px;
+          }
+          
+          span {
+            font-size: 14px;
+            font-weight: 600;
+            
+            @media (max-width: 768px) {
+              font-size: 12px;
+            }
+            
+            @media (max-width: 480px) {
+              font-size: 11px;
+            }
+          }
+        }
+        
+        .trabajador-select-header {
+          width: 100%;
+          font-size: 12px;
+          
+          @media (max-width: 768px) {
+            font-size: 11px;
+          }
+          
+          @media (max-width: 480px) {
+            font-size: 10px;
+          }
+          
+          ::ng-deep {
+            .mat-mdc-form-field-subscript-wrapper {
+              display: none;
+            }
+            
+            .mat-mdc-form-field-infix {
+              padding: 6px 0 4px 0;
+              min-height: 24px;
+            }
+            
+            .mat-mdc-text-field-wrapper {
+              padding: 0 8px;
+            }
+            
+            .mat-mdc-select-value {
+              font-size: 11px;
+            }
+            
+            .mat-mdc-form-field-outline {
+              color: rgba(0, 0, 0, 0.38);
+            }
+          }
+        }
+      }
+      
+      .trabajador-cell {
+        position: sticky;
+        left: 0;
+        background: white;
+        z-index: 1;
+        width: 250px;
+        max-width: 250px;
+        border-right: 2px solid #ccc;
+        
+        @media (max-width: 768px) {
+          width: 200px;
+          max-width: 200px;
+        }
+        
+        @media (max-width: 480px) {
+          width: 160px;
+          max-width: 160px;
+        }
+        
+        .trabajador-info {
+          padding: 6px 8px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          
+          @media (max-width: 768px) {
+            padding: 4px 6px;
+          }
+          
+          @media (max-width: 480px) {
+            padding: 3px 4px;
+          }
+          
+          strong {
+            display: block;
+            font-size: 13px;
+            margin: 0;
+            line-height: 1.2;
+            flex: 1;
+            
+            @media (max-width: 768px) {
+              font-size: 12px;
+            }
+            
+            @media (max-width: 480px) {
+              font-size: 11px;
+              line-height: 1.1;
+            }
+          }
+          
+          .quitar-trabajador-btn {
+            width: 24px;
+            height: 24px;
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+            
+            @media (max-width: 768px) {
+              width: 20px;
+              height: 20px;
+            }
+            
+            @media (max-width: 480px) {
+              width: 18px;
+              height: 18px;
+            }
+            
+            &:hover {
+              opacity: 1;
+            }
+            
+            mat-icon {
+              font-size: 16px;
+              width: 16px;
+              height: 16px;
+              
+              @media (max-width: 768px) {
+                font-size: 14px;
+                width: 14px;
+                height: 14px;
+              }
+              
+              @media (max-width: 480px) {
+                font-size: 12px;
+                width: 12px;
+                height: 12px;
+              }
+            }
+          }
+        }
+      }
+      
+      .day-header {
+        text-align: center;
+        font-weight: bold;
+        min-width: 40px;
+        width: 40px;
+        padding: 6px 2px;
+        font-size: 12px;
+        background: #f5f5f5;
+        
+        @media (max-width: 768px) {
+          min-width: 35px;
+          width: 35px;
+          padding: 4px 1px;
+          font-size: 11px;
+        }
+        
+        @media (max-width: 480px) {
+          min-width: 30px;
+          width: 30px;
+          padding: 3px 1px;
+          font-size: 10px;
+        }
+        
+        &.feriado {
+          background: #fff3e0;
+          color: #f57c00;
+        }
+        
+        .feriado-indicator {
+          display: block;
+          font-size: 10px;
+        }
+      }
+      
+      .turno-cell-container {
+        text-align: center;
+        padding: 2px;
+        min-width: 40px;
+        width: 40px;
+        cursor: pointer;
+        height: 35px;
+        
+        @media (max-width: 768px) {
+          min-width: 35px;
+          width: 35px;
+          height: 30px;
+          padding: 1px;
+        }
+        
+        @media (max-width: 480px) {
+          min-width: 30px;
+          width: 30px;
+          height: 28px;
+          padding: 1px;
+        }
+        
+        &:hover {
+          background: #f5f5f5;
+        }
+        
+        .turno-cell {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 30px;
+          border-radius: 3px;
+          transition: all 0.2s ease;
+          margin: 1px;
+          
+          @media (max-width: 768px) {
+            height: 26px;
+            border-radius: 2px;
+          }
+          
+          @media (max-width: 480px) {
+            height: 24px;
+            border-radius: 2px;
+          }
+          
+          .turno-icon {
+            font-size: 10px;
+            margin-bottom: 1px;
+            
+            @media (max-width: 768px) {
+              font-size: 9px;
+            }
+            
+            @media (max-width: 480px) {
+              font-size: 8px;
+              margin-bottom: 0;
+            }
+          }
+          
+          .turno-text {
+            font-size: 8px;
+            font-weight: bold;
+            line-height: 1;
+            
+            @media (max-width: 768px) {
+              font-size: 7px;
+            }
+            
+            @media (max-width: 480px) {
+              font-size: 6px;
+            }
+          }
+          
+          &.turno-empty {
+            background: transparent;
+            border: 1px dashed #ccc;
+            
+            &:hover {
+              border-color: #999;
+            }
+          }
+          
+          &.turno-normal {
+            border: 1px solid transparent;
+            
+            &.turno-diurno {
+              background: #fff3e0;
+              color: #f57c00;
+              border-color: #ffcc02;
+            }
+            
+            &.turno-nocturno {
+              background: #e8eaf6;
+              color: #3f51b5;
+              border-color: #3f51b5;
+            }
+            
+            &.turno-horas_especificas {
+              background: #e0f2f1;
+              color: #00695c;
+              border-color: #00bfa5;
+              
+              .turno-text {
+                font-size: 9px;
+              }
+            }
+            
+            &.turno-personalizado {
+              background: #f3e5f5;
+              color: #9c27b0;
+              border-color: #9c27b0;
+            }
+          }
+          
+          &.turno-conflict {
+            background: #ffebee;
+            color: #d32f2f;
+            border: 1px solid #d32f2f;
+            animation: pulse 1s infinite;
+          }
+        }
+      }
+    }
+  }
+  
+  .agenda-legend {
+    margin-bottom: 20px;
+    
+    @media (max-width: 768px) {
+      margin-bottom: 16px;
+    }
+    
+    @media (max-width: 480px) {
+      margin-bottom: 12px;
+    }
+    
+    .legend-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      
+      @media (max-width: 768px) {
+        gap: 12px;
+      }
+      
+      @media (max-width: 480px) {
+        gap: 8px;
+        flex-direction: column;
+      }
+      
+      .legend-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        
+        @media (max-width: 768px) {
+          gap: 6px;
+        }
+        
+        @media (max-width: 480px) {
+          gap: 4px;
+          font-size: 12px;
+        }
+        
+        .turno-cell {
+          width: 40px;
+          height: 30px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 4px;
+          font-size: 12px;
+          font-weight: bold;
+          
+          @media (max-width: 768px) {
+            width: 35px;
+            height: 26px;
+            font-size: 11px;
+          }
+          
+          @media (max-width: 480px) {
+            width: 30px;
+            height: 24px;
+            font-size: 10px;
+          }
+        }
+        
+        .feriado-indicator {
+          font-size: 16px;
+        }
+      }
+    }
+  }
+  
+  .agenda-stats {
+    margin-bottom: 20px;
+    
+    @media (max-width: 768px) {
+      margin-bottom: 16px;
+    }
+    
+    @media (max-width: 480px) {
+      margin-bottom: 12px;
+    }
+    
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 16px;
+      
+      @media (max-width: 768px) {
+        grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+        gap: 12px;
+      }
+      
+      @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      
+      .stat-item {
+        text-align: center;
+        padding: 16px;
+        background: #f5f5f5;
+        border-radius: 8px;
+        
+        @media (max-width: 768px) {
+          padding: 12px;
+          border-radius: 6px;
+        }
+        
+        @media (max-width: 480px) {
+          padding: 8px;
+          border-radius: 4px;
+        }
+        
+        strong {
+          display: block;
+          font-size: 24px;
+          color: #1976d2;
+          margin-bottom: 4px;
+          
+          @media (max-width: 768px) {
+            font-size: 20px;
+          }
+          
+          @media (max-width: 480px) {
+            font-size: 18px;
+          }
+        }
+        
+        span {
+          font-size: 14px;
+          color: #666;
+          
+          @media (max-width: 768px) {
+            font-size: 12px;
+          }
+          
+          @media (max-width: 480px) {
+            font-size: 11px;
+          }
+        }
+      }
+    }
+  }
+  
+  .no-data {
+    text-align: center;
+    padding: 40px;
+    
+    mat-icon {
+      font-size: 48px;
+      height: 48px;
+      width: 48px;
+      color: #ccc;
+      margin-bottom: 16px;
+    }
+    
+    h3 {
+      margin: 16px 0 8px 0;
+      color: #666;
+    }
+    
+    p {
+      color: #999;
+      margin: 0;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(211, 47, 47, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(211, 47, 47, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(211, 47, 47, 0);
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .agenda-container {
+    padding: 5px;
+    
+    .agenda-table-container {
+      .agenda-table {
+        .trabajador-cell {
+          width: 120px;
+          max-width: 120px;
+          
+          .trabajador-info {
+            padding: 3px 5px;
+            
+            strong {
+              font-size: 11px;
+            }
+          }
+        }
+        
+        .day-header {
+          min-width: 35px;
+          width: 35px;
+          padding: 3px 1px;
+          font-size: 10px;
+        }
+        
+        .turno-cell-container {
+          min-width: 35px;
+          width: 35px;
+          height: 30px;
+          
+          .turno-cell {
+            height: 25px;
+            margin: 1px;
+            
+            .turno-icon {
+              font-size: 8px;
+            }
+            
+            .turno-text {
+              font-size: 7px;
+            }
+          }
+        }
+      }
+    }
+    
+    .agenda-legend {
+      .legend-items {
+        justify-content: center;
+        
+        .legend-item {
+          .turno-cell {
+            width: 30px;
+            height: 25px;
+            font-size: 10px;
+          }
+        }
+      }
+    }
+    
+    .stats-grid {
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      
+      .stat-item {
+        padding: 12px;
+        
+        strong {
+          font-size: 20px;
+        }
+        
+        span {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+// Estilos para el menú contextual
+.menu-contextual-overlay {
+  position: fixed;
+  z-index: 1000;
+  pointer-events: none;
+  
+  .menu-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: transparent;
+    pointer-events: all;
+    z-index: 999;
+  }
+  
+  .menu-content {
+    position: relative;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    border: 1px solid #e0e0e0;
+    min-width: 180px;
+    pointer-events: all;
+    z-index: 1001;
+    padding: 8px 0;
+    
+    @media (max-width: 768px) {
+      min-width: 160px;
+      padding: 6px 0;
+      border-radius: 6px;
+    }
+    
+    @media (max-width: 480px) {
+      min-width: 140px;
+      padding: 4px 0;
+      border-radius: 4px;
+    }
+    
+    button {
+      width: 100%;
+      text-align: left;
+      border: none;
+      background: transparent;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      
+      &:hover {
+        background-color: #f5f5f5;
+      }
+      
+      mat-icon {
+        margin-right: 12px;
+        color: #666;
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+      }
+      
+      span {
+        color: #333;
+        font-size: 14px;
+        font-weight: 500;
+      }
+    }
+    
+    mat-divider {
+      margin: 8px 0;
+    }
+  }
+}
+
+// Estilos para mensaje cuando no hay trabajadores
+.empty-calendar-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  color: #666;
+  
+  @media (max-width: 768px) {
+    padding: 20px;
+  }
+  
+  @media (max-width: 480px) {
+    padding: 16px;
+  }
+  
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    color: #999;
+    
+    @media (max-width: 768px) {
+      font-size: 40px;
+      width: 40px;
+      height: 40px;
+      margin-bottom: 12px;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+      margin-bottom: 8px;
+    }
+  }
+  
+  p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+    
+    @media (max-width: 768px) {
+      font-size: 13px;
+    }
+    
+    @media (max-width: 480px) {
+      font-size: 12px;
+      line-height: 1.4;
+    }
+  }
+}
+
+// Vista Mobile/Responsiva - Vertical con Paginación por Semanas
+.mobile-view {
+  display: none;
+  
+  @media (max-width: 768px) {
+    display: block;
+  }
+}
+
+.desktop-view {
+  display: block;
+  
+  @media (max-width: 768px) {
+    display: none;
+  }
+}
+
+.agenda-vertical-container {
+  padding: 16px;
+  
+  @media (max-width: 480px) {
+    padding: 8px;
+  }
+}
+
+// Selector de trabajador para móvil
+.trabajador-selector-mobile {
+  margin-bottom: 16px;
+  
+  .trabajador-select-mobile {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+  
+  .trabajadores-count {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+  }
+}
+
+// Navegación de semanas
+.semana-navigation {
+  margin-bottom: 16px;
+  
+  .nav-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    
+    .semana-info {
+      text-align: center;
+      flex: 1;
+      
+      h3 {
+        margin: 0 0 4px 0;
+        font-size: 18px;
+        color: #333;
+      }
+      
+      p {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+      }
+    }
+  }
+  
+  .semana-indicators {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    
+    button {
+      width: 36px;
+      height: 36px;
+      font-size: 14px;
+      font-weight: 600;
+      
+      &:not([color="primary"]) {
+        background-color: #f5f5f5;
+        color: #666;
+        
+        &:hover {
+          background-color: #e0e0e0;
+        }
+      }
+    }
+  }
+}
+
+// Lista de trabajadores en vista vertical
+.trabajadores-list {
+  position: relative;
+  z-index: 2;
+  
+  .trabajador-card {
+    margin-bottom: 16px;
+    position: relative;
+    z-index: 3;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+    
+    .trabajador-header-mobile {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      
+      span {
+        flex: 1;
+        font-size: 16px;
+        font-weight: 600;
+      }
+      
+      .quitar-trabajador-btn-mobile {
+        opacity: 0.7;
+        transition: opacity 0.2s ease;
+        z-index: 4;
+        position: relative;
+        
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
+    
+    .dias-semana {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+      gap: 8px;
+      position: relative;
+      z-index: 3;
+      
+      @media (max-width: 480px) {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+      }
+      
+      .dia-item {
+        border: 1px solid #e0e0e0;
+        border-radius: 8px;
+        overflow: hidden;
+        transition: all 0.2s ease;
+        position: relative;
+        z-index: 4;
+        background: white;
+        
+        &:hover {
+          border-color: #1976d2;
+          box-shadow: 0 2px 8px rgba(25, 118, 210, 0.2);
+          z-index: 5;
+        }
+        
+        .dia-header {
+          background-color: #f5f5f5;
+          padding: 6px 8px;
+          text-align: center;
+          border-bottom: 1px solid #e0e0e0;
+          position: relative;
+          
+          .dia-nombre {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+          }
+          
+          .dia-numero {
+            display: block;
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            margin-top: 2px;
+          }
+          
+          .feriado-indicator {
+            position: absolute;
+            top: 2px;
+            right: 4px;
+            font-size: 10px;
+          }
+        }
+        
+        .turno-container {
+          padding: 8px;
+          min-height: 60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          position: relative;
+          z-index: 5;
+          background: white;
+          
+          &:hover {
+            background: #f9f9f9;
+          }
+          
+          &:active {
+            background: #f0f0f0;
+          }
+          
+          .turno-mobile {
+            width: 100%;
+            min-height: 44px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            pointer-events: auto;
+            
+            &:hover {
+              transform: scale(1.05);
+            }
+            
+            &:active {
+              transform: scale(0.95);
+            }
+            
+            .turno-icon {
+              font-size: 16px;
+              margin-bottom: 2px;
+            }
+            
+            .turno-text {
+              font-size: 10px;
+              font-weight: 600;
+              text-align: center;
+              line-height: 1.1;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .mat-mdc-card {
+    margin-bottom: 12px !important;
+  }
+  
+  .mat-mdc-card-header {
+    padding: 12px !important;
+  }
+  
+  .mat-mdc-card-content {
+    padding: 12px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .mat-mdc-card {
+    margin-bottom: 8px !important;
+  }
+  
+  .mat-mdc-card-header {
+    padding: 8px !important;
+  }
+  
+  .mat-mdc-card-content {
+    padding: 8px !important;
+  }
+  
+  .mat-mdc-card-title {
+    font-size: 16px !important;
+  }
+  
+  .mat-mdc-card-subtitle {
+    font-size: 12px !important;
+  }
+}
+
+// Estilos para turnos múltiples
+.turno-multiple {
+  background: linear-gradient(135deg, #4CAF50 50%, #FF9800 50%) !important;
+  border: 2px solid #2196F3 !important;
+  position: relative;
+  
+  &::before {
+    content: "🔄";
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    background: #2196F3;
+    color: white;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    font-size: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+  }
+  
+  .turno-text {
+    font-size: 9px;
+    font-weight: bold;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .turno-icon {
+    display: none; // Ocultar iconos individuales en turnos múltiples
+  }
+}
+
+// Efecto hover para turnos múltiples
+.turno-multiple:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  z-index: 5;
+  
+  .turno-text {
+    white-space: normal;
+    overflow: visible;
+  }
+}
+
+// Estilo para conflicto en turnos múltiples
+.turno-multiple.turno-conflict {
+  background: repeating-linear-gradient(
+    45deg,
+    #ffeb3b,
+    #ffeb3b 5px,
+    #f44336 5px,
+    #f44336 10px
+  ) !important;
+  animation: conflictPulse 2s infinite;
+}
+
+@keyframes conflictPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+// Mejoras para móvil con turnos múltiples
+@media (max-width: 768px) {
+  .turno-multiple {
+    min-height: 45px;
+    
+    &::before {
+      width: 14px;
+      height: 14px;
+      font-size: 7px;
+      top: -1px;
+      right: -1px;
+    }
+    
+    .turno-text {
+      line-height: 1.2;
+      padding: 2px;
+    }
+  }
+}

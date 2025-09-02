@@ -1,0 +1,110 @@
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$frontend-primary: mat.define-palette(mat.$indigo-palette);
+$frontend-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$frontend-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$frontend-theme: mat.define-light-theme((
+  color: (
+    primary: $frontend-primary,
+    accent: $frontend-accent,
+    warn: $frontend-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0
+));
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include mat.all-component-themes($frontend-theme);
+
+/* You can add global styles to this file, and also import other style files */
+
+html, body { 
+  height: 100%; 
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+}
+
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  scroll-behavior: smooth;
+  // Mejorar scroll en mobile (especialmente iOS)
+  -webkit-overflow-scrolling: touch;
+}
+
+// Asegurar que las aplicaciones Angular puedan hacer scroll
+app-root {
+  display: block;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+// Scroll suave para toda la aplicación
+* {
+  scroll-behavior: smooth;
+}
+
+// Corregir problemas de scroll en componentes Angular generados automáticamente
+.agenda-page-container,
+[class*="agenda-page-container"] {
+  height: auto !important;
+  min-height: 100vh !important;
+  overflow: visible !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+}
+
+// Estilos específicos para mobile
+@media (max-width: 768px) {
+  html, body {
+    height: 100%;
+    min-height: 100%;
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  
+  body {
+    // Prevenir el zoom en inputs en iOS
+    -webkit-text-size-adjust: 100%;
+    // Mejorar el rendimiento del scroll
+    -webkit-overflow-scrolling: touch;
+    // Prevenir el bounce scroll en iOS
+    overscroll-behavior-y: contain;
+  }
+  
+  app-root {
+    min-height: 100vh;
+    height: auto;
+    overflow-x: hidden;
+  }
+  
+  // Corregir contenedores problemáticos en mobile
+  .agenda-page-container,
+  [class*="agenda-page-container"] {
+    height: auto !important;
+    overflow: visible !important;
+    overflow-y: auto !important;
+  }
+}
