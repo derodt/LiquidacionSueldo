@@ -1,9 +1,15 @@
 <div class="layout-container">
+  <!-- Header móvil -->
+  <app-mobile-header></app-mobile-header>
+  
+  <!-- Sidebar -->
+  <app-sidebar></app-sidebar>
+  
   <!-- Contenido principal -->
-  <main class="main-content">
+  <main class="main-content" 
+        [class.sidebar-hidden]="sidebarHidden"
+        [class.sidebar-collapsed]="sidebarCollapsed && !sidebarHidden"
+        [class.mobile-header-offset]="true">
     <router-outlet></router-outlet>
   </main>
-  
-  <!-- Sidebar del lado derecho -->
-  <app-sidebar></app-sidebar>
 </div>

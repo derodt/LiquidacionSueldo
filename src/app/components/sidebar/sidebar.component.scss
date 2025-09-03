@@ -1,19 +1,962 @@
-// Variables CSS para fácil personalización
+// ================================
+// OVERLAY MÓVIL
+// ================================
+
+.sidebar-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  cursor: pointer;
+  backdrop-filter: blur(2px);
+  animation: fadeInOverlay 0.15s ease-out;
+  
+  @media (min-width: 769px) {
+    display: none;
+  }
+}
+
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// ================================
+// GITHUB-STYLE SIDEBAR
+// ================================
+
 :root {
-  --sidebar-width: 320px;
-  --sidebar-collapsed-width: 72px;
-  --sidebar-mobile-width: 280px;
-  --sidebar-primary-color: #1976d2;
-  --sidebar-primary-dark: #1565c0;
-  --sidebar-bg-color: #ffffff;
-  --sidebar-text-color: #333333;
-  --sidebar-text-secondary: #666666;
-  --sidebar-border-color: #e0e0e0;
-  --sidebar-hover-bg: #f5f5f5;
-  --sidebar-active-bg: #e3f2fd;
-  --sidebar-transition: all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-  --sidebar-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  --sidebar-z-index: 1000;
+  --github-sidebar-width: 256px;
+  --github-sidebar-collapsed: 64px;
+  // Forzar tema claro para el sidebar
+  --github-bg: #ffffff !important;
+  --github-bg-dark: #ffffff !important; // Forzar blanco también en modo oscuro
+  --github-border: #d1d9e0;
+  --github-border-dark: #d1d9e0; // Mantener bordes claros
+  --github-text: #1f2328;
+  --github-text-dark: #1f2328; // Forzar texto oscuro en modo oscuro
+  --github-text-secondary: #656d76;
+  --github-text-secondary-dark: #656d76; // Mantener texto secundario oscuro
+  --github-hover: #f6f8fa;
+  --github-hover-dark: #f6f8fa; // Forzar hover claro
+  --github-active: #eef4fd;
+  --github-active-dark: #eef4fd; // Forzar active claro
+  --github-primary: #0969da;
+  --github-primary-dark: #0969da; // Mantener azul estándar
+  --github-shadow: 0 8px 24px rgba(149, 157, 165, 0.2);
+  --github-transition: all 0.15s ease-in-out;
+  --github-radius: 6px;
+}
+
+.github-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: var(--github-sidebar-width);
+  background: var(--github-bg);
+  border-right: 1px solid var(--github-border);
+  z-index: 1000;
+  transition: var(--github-transition);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  
+  &.collapsed {
+    width: var(--github-sidebar-collapsed);
+  }
+  
+  &.hidden {
+    transform: translateX(-100%);
+  }
+  
+  &.mobile {
+    width: var(--github-sidebar-width);
+    box-shadow: var(--github-shadow);
+    z-index: 1001; // Mayor z-index en móvil para estar sobre el overlay
+  }
+}
+
+// ================================
+// HEADER ESTILO GITHUB
+// ================================
+
+.github-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  border-bottom: 1px solid var(--github-border);
+  min-height: 64px;
+  background: var(--github-bg);
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+  }
+  
+  .menu-toggle {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: none;
+    border-radius: var(--github-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--github-text-secondary);
+    cursor: pointer;
+    transition: var(--github-transition);
+    
+    &:hover {
+      background: var(--github-hover);
+      color: var(--github-text);
+    }
+    
+    &:active {
+      background: var(--github-active);
+    }
+  }
+  
+  .repo-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    
+    .repo-icon {
+      color: var(--github-text-secondary);
+      flex-shrink: 0;
+    }
+    
+    .repo-details {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      
+      .repo-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--github-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      
+      .repo-visibility {
+        font-size: 12px;
+        color: var(--github-text-secondary);
+        background: rgba(175, 184, 193, 0.2);
+        padding: 2px 6px;
+        border-radius: 12px;
+        border: 1px solid var(--github-border);
+        align-self: flex-start;
+        margin-top: 2px;
+      }
+    }
+  }
+  
+  .close-btn {
+    width: 24px;
+    height: 24px;
+    border: none;
+    background: none;
+    border-radius: var(--github-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--github-text-secondary);
+    cursor: pointer;
+    transition: var(--github-transition);
+    
+    &:hover {
+      background: var(--github-hover);
+      color: var(--github-text);
+    }
+  }
+}
+
+// ================================
+// NAVEGACIÓN PRINCIPAL
+// ================================
+
+.github-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 0;
+  
+  .nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    
+    &.recent-list {
+      .nav-item {
+        padding-left: 44px;
+        font-size: 13px;
+        
+        .nav-icon {
+          width: 16px;
+          height: 16px;
+          margin-right: 8px;
+          
+          svg {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+    }
+  }
+  
+  .nav-item {
+    position: relative;
+    margin: 0 8px 2px 8px;
+    border-radius: var(--github-radius);
+    cursor: pointer;
+    transition: var(--github-transition);
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    height: auto;
+    min-height: 32px;
+    color: var(--github-text);
+    text-decoration: none;
+    font-size: 14px;
+    
+    &:hover {
+      background: var(--github-hover);
+    }
+    
+    &.active {
+      background: var(--github-active);
+      color: var(--github-primary);
+      font-weight: 500;
+      
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: var(--github-primary);
+        border-radius: 0 2px 2px 0;
+      }
+      
+      .nav-icon svg {
+        color: var(--github-primary);
+      }
+    }
+    
+    &.recent-item {
+      color: var(--github-text-secondary);
+      font-size: 13px;
+      
+      &:hover {
+        color: var(--github-text);
+      }
+    }
+    
+    .nav-icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      
+      svg {
+        width: 16px;
+        height: 16px;
+        color: var(--github-text-secondary);
+        transition: var(--github-transition);
+      }
+    }
+    
+    .nav-label {
+      font-weight: 400;
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .nav-tooltip {
+      position: absolute;
+      left: calc(100% + 8px);
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--github-text);
+      color: var(--github-bg);
+      padding: 4px 8px;
+      border-radius: var(--github-radius);
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--github-transition);
+      z-index: 1001;
+      box-shadow: var(--github-shadow);
+      
+      &::before {
+        content: '';
+        position: absolute;
+        right: 100%;
+        top: 50%;
+        transform: translateY(-50%);
+        border: 4px solid transparent;
+        border-right-color: var(--github-text);
+      }
+    }
+    
+    &:hover .nav-tooltip {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+  
+  .nav-section {
+    margin-top: 24px;
+    padding: 0 8px;
+    
+    .section-title {
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--github-text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+  }
+}
+
+// ================================
+// FOOTER USUARIO
+// ================================
+
+.github-footer {
+  padding: 16px;
+  border-top: 1px solid var(--github-border);
+  background: var(--github-bg);
+  
+  .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+    border-radius: var(--github-radius);
+    transition: var(--github-transition);
+    cursor: pointer;
+    
+    &:hover {
+      background: var(--github-hover);
+    }
+    
+    .user-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    
+    .user-avatar-icon {
+      width: 28px;
+      height: 28px;
+      background: var(--github-text-secondary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      
+      svg {
+        width: 14px;
+        height: 14px;
+        fill: #1f2328;
+      }
+    }
+    
+    .user-avatar-fallback {
+      width: 24px;
+      height: 24px;
+      background: var(--github-primary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+    
+    .user-info {
+      flex: 1;
+      min-width: 0;
+      
+      .user-name {
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--github-text);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.2;
+      }
+      
+      .user-status {
+        font-size: 11px;
+        color: var(--github-text-secondary);
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        line-height: 1.2;
+        margin-top: 1px;
+      }
+    }
+    
+    .user-menu-btn {
+      width: 16px;
+      height: 16px;
+      border: none;
+      background: none;
+      color: var(--github-text-secondary);
+      cursor: pointer;
+      transition: var(--github-transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      
+      &:hover {
+        color: var(--github-text);
+      }
+      
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+    }
+  }
+}
+
+// ================================
+// BOTÓN FLOTANTE ESTILO GITHUB
+// ================================
+
+.show-sidebar-btn.github-style {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 44px;
+  height: 44px;
+  background: #ffffff !important; // Forzar fondo blanco
+  border: 1px solid #d1d9e0 !important;
+  border-radius: var(--github-radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--github-shadow);
+  transition: var(--github-transition);
+  z-index: 999; // Z-index menor para no interferir con contenido
+  color: #656d76 !important;
+  
+  // Asegurar espacio alrededor del botón
+  margin: 8px;
+  
+  &:hover {
+    background: #f6f8fa !important;
+    color: #1f2328 !important;
+    box-shadow: 0 12px 28px rgba(149, 157, 165, 0.25);
+    transform: translateY(-1px); // Efecto de elevación
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+  
+  // Asegurar que no interfiera con otros elementos
+  &::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    z-index: -1;
+  }
+}
+
+// ================================
+// MODO COLAPSADO
+// ================================
+
+.github-sidebar.collapsed {
+  .github-header {
+    .header-content {
+      justify-content: center;
+    }
+    
+    .repo-info {
+      display: none;
+    }
+    
+    .close-btn {
+      display: none;
+    }
+  }
+  
+  .nav-item {
+    margin: 2px 8px;
+    padding: 8px;
+    justify-content: center;
+    
+    .nav-label {
+      display: none;
+    }
+    
+    .nav-icon {
+      margin: 0;
+    }
+    
+    &.active::before {
+      left: -8px;
+      width: 2px;
+    }
+  }
+  
+  .nav-section {
+    .section-title {
+      display: none;
+    }
+  }
+  
+  .github-footer {
+    .user-info {
+      display: none;
+    }
+    
+    .user-menu-btn {
+      display: none;
+    }
+    
+    .user-profile {
+      justify-content: center;
+    }
+  }
+}
+
+// ================================
+// RESPONSIVE MOBILE
+// ================================
+
+@media (max-width: 768px) {
+  .github-sidebar {
+    // En móvil siempre usar ancho completo cuando esté visible
+    width: var(--github-sidebar-width) !important;
+    
+    &:not(.hidden) {
+      box-shadow: var(--github-shadow);
+    }
+    
+    // En móvil nunca aplicar estilos de colapsado
+    &.collapsed {
+      width: var(--github-sidebar-width) !important;
+      
+      .github-header {
+        .header-content {
+          justify-content: flex-start;
+        }
+        
+        .repo-info {
+          display: flex;
+        }
+        
+        .close-btn {
+          display: flex;
+        }
+      }
+      
+      .nav-item {
+        margin: 0 8px 2px 8px;
+        padding: 8px 12px;
+        justify-content: flex-start;
+        
+        .nav-label {
+          display: block;
+        }
+        
+        .nav-icon {
+          margin-right: 12px;
+        }
+        
+        &.active::before {
+          left: 0;
+          width: 2px;
+        }
+      }
+      
+      .nav-section {
+        .section-title {
+          display: block;
+        }
+      }
+      
+      .github-footer {
+        .user-info {
+          display: flex;
+        }
+        
+        .user-menu-btn {
+          display: flex;
+        }
+        
+        .user-profile {
+          justify-content: flex-start;
+        }
+      }
+    }
+  }
+}
+
+// ================================
+// SCROLL PERSONALIZADO
+// ================================
+
+.github-nav::-webkit-scrollbar {
+  width: 6px;
+}
+
+.github-nav::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.github-nav::-webkit-scrollbar-thumb {
+  background: var(--github-border);
+  border-radius: 3px;
+}
+
+.github-nav::-webkit-scrollbar-thumb:hover {
+  background: var(--github-text-secondary);
+}
+
+// ================================
+// ESTADOS DE FOCUS
+// ================================
+
+.menu-toggle,
+.close-btn,
+.nav-item,
+.user-menu-btn,
+.show-sidebar-btn {
+  &:focus-visible {
+    outline: 2px solid var(--github-primary);
+    outline-offset: 2px;
+  }
+}
+
+// ================================
+// FORZAR TEMA CLARO
+// ================================
+
+.github-sidebar {
+  // Forzar siempre fondo blanco
+  background: #ffffff !important;
+  border-right-color: #d1d9e0 !important;
+  
+  // Forzar colores de texto claros
+  * {
+    color: inherit;
+  }
+  
+  .github-header {
+    background: #ffffff !important;
+    border-bottom-color: #d1d9e0 !important;
+    
+    .menu-toggle,
+    .close-btn {
+      color: #656d76 !important;
+      
+      &:hover {
+        background: #f6f8fa !important;
+        color: #1f2328 !important;
+      }
+    }
+    
+    .repo-details {
+      .repo-name {
+        color: #1f2328 !important;
+      }
+      
+      .repo-visibility {
+        color: #656d76 !important;
+        background: rgba(175, 184, 193, 0.2) !important;
+        border-color: #d1d9e0 !important;
+      }
+    }
+  }
+  
+  .nav-item {
+    color: #1f2328 !important;
+    
+    &:hover {
+      background: #f6f8fa !important;
+    }
+    
+    &.active {
+      background: #eef4fd !important;
+      color: #0969da !important;
+      
+      .nav-icon svg {
+        color: #0969da !important;
+      }
+    }
+    
+    .nav-icon svg {
+      color: #656d76 !important;
+    }
+  }
+  
+  .section-title {
+    color: #656d76 !important;
+  }
+  
+  .github-footer {
+    border-top-color: #d1d9e0 !important;
+    
+    .user-name {
+      color: #1f2328 !important;
+    }
+    
+    .user-status {
+      color: #656d76 !important;
+    }
+    
+    .user-menu-btn {
+      color: #656d76 !important;
+      
+      &:hover {
+        color: #1f2328 !important;
+      }
+    }
+  }
+}
+
+// ================================
+// ANIMACIONES
+// ================================
+
+@keyframes slideInGithub {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.github-sidebar:not(.hidden) {
+  animation: slideInGithub 0.15s ease-out;
+}
+
+// ================================
+// UTILIDADES
+// ================================
+
+.github-sidebar {
+  .nav-item {
+    &:first-child {
+      margin-top: 0;
+    }
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  // Destacar elementos importantes
+  .nav-item[data-important="true"] {
+    .nav-icon svg {
+      color: var(--github-primary);
+    }
+    
+    .nav-label {
+      font-weight: 500;
+    }
+  }
+}
+
+// ================================
+// SIDEBAR WRAPPER
+// ================================
+
+.sidebar-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: var(--sidebar-width);
+  z-index: var(--sidebar-z-index);
+  transition: var(--sidebar-transition);
+  
+  &.collapsed {
+    width: var(--sidebar-collapsed-width);
+  }
+  
+  &.hidden {
+    transform: translateX(-100%);
+  }
+  
+  &.mobile {
+    width: var(--sidebar-collapsed-width);
+  }
+}
+
+// ================================
+// SIDEBAR PRINCIPAL
+// ================================
+
+.sidebar {
+  width: 100%;
+  height: 100%;
+  background: var(--sidebar-bg);
+  backdrop-filter: blur(20px);
+  border-radius: 0 var(--sidebar-border-radius) var(--sidebar-border-radius) 0;
+  box-shadow: var(--sidebar-shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+    pointer-events: none;
+  }
+}
+
+// ================================
+// HEADER MODERNO
+// ================================
+
+.sidebar-header {
+  padding: 24px 20px;
+  border-bottom: 1px solid var(--sidebar-border);
+  position: relative;
+  background: var(--sidebar-bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 88px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex: 1;
+}
+
+.logo-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sidebar-text-primary);
+  transition: var(--sidebar-transition);
+  
+  svg {
+    width: 32px;
+    height: 32px;
+  }
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1.05);
+  }
+}
+
+.logo-content {
+  overflow: hidden;
+  
+  .logo-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--sidebar-text-primary);
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+  }
+  
+  .logo-subtitle {
+    font-size: 12px;
+    color: var(--sidebar-text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.header-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.control-btn {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 8px;
+  color: var(--sidebar-text-secondary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--sidebar-transition);
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--sidebar-text-primary);
+    transform: scale(1.05);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+  
+  svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 
 .sidebar-container {
@@ -23,65 +966,21 @@
   height: 100vh;
   z-index: var(--sidebar-z-index);
   transition: var(--sidebar-transition);
+  pointer-events: auto;
+  
+  // Overlay behavior - no afecta el layout del contenido
+  &.collapsed {
+    transform: translateX(-100%);
+  }
   
   &:not(.collapsed) {
-    pointer-events: auto;
+    transform: translateX(0);
   }
   
   &.mobile {
-    // En mobile, controlar la visibilidad completamente
-    &.collapsed {
-      pointer-events: none;
-      visibility: hidden;
-    }
-    
-    &:not(.collapsed) {
-      pointer-events: auto;
-      visibility: visible;
-    }
-    
-    .toggle-btn {
-      position: fixed;
-      top: 16px;
-      left: 16px;
-      z-index: calc(var(--sidebar-z-index) + 2);
-      background-color: var(--sidebar-primary-color);
-      color: white;
-      box-shadow: var(--sidebar-shadow);
-      pointer-events: auto;
-      transition: var(--sidebar-transition);
-      border: none;
-      
-      &:hover {
-        background-color: var(--sidebar-primary-dark);
-        transform: scale(1.05);
-      }
-      
-      &:focus {
-        outline: 2px solid var(--sidebar-primary-color);
-        outline-offset: 2px;
-      }
-    }
-  }
-  
-  .toggle-btn {
-    position: absolute;
-    top: 16px;
-    right: -48px;
-    z-index: calc(var(--sidebar-z-index) + 1);
-    background-color: #f5f5f5;
-    border: 1px solid var(--sidebar-border-color);
-    transition: var(--sidebar-transition);
-    
-    &:hover {
-      background-color: #eeeeee;
-      transform: scale(1.1);
-    }
-    
-    &.mobile-toggle {
-      right: auto;
-      left: 16px;
-      top: 16px;
+    // Comportamiento igual que desktop - siempre overlay
+    .sidebar-content {
+      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.2);
     }
   }
   
@@ -92,9 +991,7 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
-    z-index: 999;
-    // Solo permitir interacción cuando está visible
-    pointer-events: auto;
+    z-index: calc(var(--sidebar-z-index) - 1);
     opacity: 1;
     visibility: visible;
     transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -132,18 +1029,17 @@
       }
       
       .nav-item {
-        padding: 0 16px;
+        padding: 0 8px; /* Reducido de 16px a 8px para mejor centrado */
         justify-content: center;
+        margin-left: 0; /* Sin margin izquierdo en modo colapsado */
       }
     }
     
     @media (max-width: 768px) {
       width: var(--sidebar-mobile-width);
-      transform: translateX(-100%);
-      box-shadow: 4px 0 20px rgba(0, 0, 0, 0.15);
       
-      &:not(.collapsed) {
-        transform: translateX(0);
+      &.collapsed {
+        width: var(--sidebar-mobile-width);
       }
     }
     
@@ -228,21 +1124,25 @@
 
 .menu-section {
   flex: 1;
-  padding: 16px 0;
+  padding: 16px 0 16px 8px; /* Reducido padding izquierdo de 16px a 8px */
   overflow-y: auto;
   
   .nav-list {
+    list-style: none;
     padding: 0;
+    margin: 0;
   }
   
   .nav-item {
+    display: flex;
+    align-items: center;
     margin-bottom: 4px;
     border-radius: 24px 0 0 24px;
-    margin-left: 16px;
+    margin-left: 4px; /* Reducido de 16px a 4px */
     cursor: pointer;
     transition: var(--sidebar-transition);
     position: relative;
-    padding: 12px 20px;
+    padding: 12px 8px 12px 8px; /* Reducido padding horizontal de 20px a 8px */
     
     &:hover {
       background-color: var(--sidebar-hover-bg);
@@ -254,7 +1154,7 @@
       border-left: 4px solid var(--sidebar-primary-color);
       transform: translateX(2px);
       
-      .mat-list-item-icon {
+      .nav-icon {
         color: var(--sidebar-primary-color);
         transform: scale(1.1);
       }
@@ -277,13 +1177,55 @@
       }
     }
     
-    .mat-list-item-icon {
+    // Estilos para las clases del HTML moderno
+    .menu-icon {
       margin-right: 16px;
       color: var(--sidebar-text-secondary);
       transition: all 0.3s ease;
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0; /* Evita que el icono se comprima */
+      
+      svg {
+        width: 20px;
+        height: 20px;
+        color: inherit;
+      }
+    }
+    
+    .nav-icon {
+      margin-right: 12px; /* Reducido de 16px a 12px */
+      margin-left: 0; /* Asegurar que no haya margin izquierdo */
+      color: var(--sidebar-text-secondary);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      width: 24px;
+      height: 24px;
+    }
+    
+    // Estilos para las clases del HTML moderno
+    .menu-icon {
+      margin-right: 16px;
+      color: var(--sidebar-text-secondary);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0; /* Evita que el icono se comprima */
+      
+      svg {
+        width: 20px;
+        height: 20px;
+        color: inherit;
+      }
     }
     
     .nav-content {
@@ -305,6 +1247,29 @@
         color: var(--sidebar-text-secondary);
         line-height: 1.2;
         transition: var(--sidebar-transition);
+      }
+    }
+    
+    // Estilos para el contenido del menú moderno
+    .menu-content {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      transition: var(--sidebar-transition);
+      
+      .menu-label {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--sidebar-text-color);
+        margin-bottom: 2px;
+        line-height: 1.2;
+      }
+      
+      .menu-description {
+        font-size: 12px;
+        color: var(--sidebar-text-secondary);
+        line-height: 1.2;
+        opacity: 0.8;
       }
     }
     .tooltip {
@@ -341,6 +1306,82 @@
         border: 6px solid transparent;
         border-right-color: #333;
       }
+    }
+  }
+}
+
+// Estilos específicos para menu-item del HTML moderno
+.menu-item {
+  display: flex;
+  align-items: center; /* Alinea iconos y texto horizontalmente */
+  margin-bottom: 4px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: var(--sidebar-transition);
+  position: relative;
+  padding: 12px 16px;
+  
+  &:hover {
+    background-color: var(--sidebar-hover-bg);
+    transform: translateX(2px);
+    
+    .menu-icon {
+      transform: scale(1.05);
+    }
+  }
+  
+  &.active {
+    background-color: var(--sidebar-active-bg);
+    border-left: 3px solid var(--sidebar-primary-color);
+    
+    .menu-icon {
+      color: var(--sidebar-primary-color);
+      transform: scale(1.1);
+    }
+    
+    .menu-label {
+      color: var(--sidebar-primary-color);
+      font-weight: 600;
+    }
+  }
+  
+  .menu-icon {
+    margin-right: 16px;
+    color: var(--sidebar-text-secondary);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0; /* Evita que el icono se comprima */
+    
+    svg {
+      width: 20px;
+      height: 20px;
+      color: inherit;
+    }
+  }
+  
+  .menu-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    transition: var(--sidebar-transition);
+    
+    .menu-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--sidebar-text-color);
+      margin-bottom: 2px;
+      line-height: 1.2;
+    }
+    
+    .menu-description {
+      font-size: 12px;
+      color: var(--sidebar-text-secondary);
+      line-height: 1.2;
+      opacity: 0.8;
     }
   }
 }
@@ -520,4 +1561,121 @@
 
 .menu-section::-webkit-scrollbar-thumb:hover {
   background: #999;
+}
+
+// Estilos para funcionalidad de ocultar sidebar
+.sidebar-wrapper {
+  transition: transform 0.3s ease;
+  
+  &.hidden {
+    transform: translateX(-100%);
+  }
+}
+
+.hide-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
+  
+  .hide-icon {
+    font-size: 16px;
+    line-height: 1;
+  }
+}
+
+.show-sidebar-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 1001;
+  width: 50px;
+  height: 50px;
+  background: #1976d2;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+  color: white;
+  
+  &:hover {
+    background: #1565c0;
+    transform: scale(1.05);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+  
+  .show-icon {
+    font-size: 20px;
+    line-height: 1;
+  }
+}
+
+// ================================
+// ELIMINAR PUNTOS DE ICONOS
+// ================================
+
+.menu-list {
+  list-style: none !important;
+  list-style-type: none !important;
+  list-style-image: none !important;
+  
+  li {
+    list-style: none !important;
+    list-style-type: none !important;
+    list-style-image: none !important;
+    
+    &::before,
+    &::after,
+    &::marker {
+      display: none !important;
+      content: none !important;
+    }
+  }
+}
+
+.nav-list {
+  list-style: none !important;
+  list-style-type: none !important;
+  list-style-image: none !important;
+  
+  .nav-item {
+    list-style: none !important;
+    list-style-type: none !important;
+    list-style-image: none !important;
+    
+    &::before,
+    &::after,
+    &::marker {
+      display: none !important;
+      content: none !important;
+    }
+  }
+}
+
+// Eliminar cualquier pseudo-elemento que pueda causar puntos
+.sidebar * {
+  &::marker {
+    display: none !important;
+  }
 }

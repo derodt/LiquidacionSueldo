@@ -1,63 +1,138 @@
-<div class="sidebar-container" [class.collapsed]="isCollapsed" [class.mobile]="isMobile">
-  <!-- Botón toggle -->
-  <button 
-    mat-icon-button 
-    class="toggle-btn"
-    (click)="toggleSidebar()"
-    [class.mobile-toggle]="isMobile"
-    [attr.aria-label]="isCollapsed ? 'Abrir menú' : 'Cerrar menú'"
-    [matTooltip]="isCollapsed ? 'Abrir menú' : 'Cerrar menú'"
-    [matTooltipPosition]="'right'">
-    <mat-icon>{{ isCollapsed ? 'menu' : 'close' }}</mat-icon>
-  </button>
-
-  <!-- Overlay para móvil - solo cuando está abierto -->
-  <div 
-    class="sidebar-overlay" 
-    *ngIf="isMobile && !isCollapsed"
-    (click)="closeSidebar()"
-    (touchstart)="closeSidebar()">
-  </div>
-
-  <!-- Contenido del sidebar -->
-  <nav class="sidebar-content" [class.collapsed]="isCollapsed">
-    <div class="sidebar-header">
-      <div class="logo-section" *ngIf="!isCollapsed">
-        <mat-icon class="logo-icon">business_center</mat-icon>
-        <h3 class="app-title">Sistema de Liquidación</h3>
-      </div>
-      <mat-icon class="logo-icon-collapsed" *ngIf="isCollapsed">business_center</mat-icon>
-    </div>
-
-    <div class="menu-section">
-      <mat-nav-list class="nav-list">
-        <mat-list-item 
-          *ngFor="let item of menuItems" 
-          class="nav-item"
-          (click)="navigateTo(item.route)"
-          [class.active]="isRouteActive(item.route)"
-          [matTooltip]="isCollapsed ? item.label + ' - ' + item.description : ''"
-          [matTooltipPosition]="'right'"
-          [matTooltipDisabled]="!isCollapsed">
-          
-          <mat-icon matListIcon>{{ item.icon }}</mat-icon>
-          
-          <div matListContent class="nav-content" *ngIf="!isCollapsed">
-            <span class="nav-label">{{ item.label }}</span>
-            <span class="nav-description">{{ item.description }}</span>
-          </div>
-        </mat-list-item>
-      </mat-nav-list>
-    </div>
-
-    <div class="sidebar-footer" *ngIf="!isCollapsed">
-      <div class="user-info">
-        <mat-icon>account_circle</mat-icon>
-        <div class="user-details">
-          <span class="user-name">Admin</span>
-          <span class="user-role">Administrador</span>
+<!-- SIDEBAR ESTILO GITHUB -->
+<div 
+  class="github-sidebar" 
+  [class.collapsed]="isCollapsed" 
+  [class.hidden]="isHidden"
+  [class.mobile]="isMobile">
+  
+  <!-- HEADER GITHUB -->
+  <div class="github-header">
+    <div class="header-content">
+      <button 
+        class="menu-toggle" 
+        (click)="isMobile ? hide() : toggleCollapse()"
+        [attr.aria-label]="isMobile ? 'Cerrar menú' : (isCollapsed ? 'Expandir menú' : 'Colapsar menú')">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path fill-rule="evenodd" d="M1 2.75A.75.75 0 011.75 2h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 2.75zm0 5A.75.75 0 011.75 7h12.5a.75.75 0 110 1.5H1.75A.75.75 0 011 7.75zM1.75 12a.75.75 0 100 1.5h12.5a.75.75 0 100-1.5H1.75z"></path>
+        </svg>
+      </button>
+      
+      <div class="repo-info" *ngIf="!isCollapsed || isMobile">
+        <svg class="repo-icon" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path>
+        </svg>
+        <div class="repo-details">
+          <span class="repo-name">LiquidacionSueldo</span>
+          <span class="repo-visibility">Private</span>
         </div>
       </div>
     </div>
+    
+    <button 
+      class="close-btn" 
+      (click)="hide()" 
+      *ngIf="isMobile"
+      aria-label="Cerrar sidebar">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="currentColor">
+        <path d="M6.6 6L11.3.3A.4.4 0 0010.7.7L6 5.4 1.3.7A.4.4 0 00.7 1.3L5.4 6 .7 10.7a.4.4 0 00.6.6L6 6.6l4.7 4.7a.4.4 0 00.6-.6L6.6 6z"/>
+      </svg>
+    </button>
+  </div>
+
+  <!-- NAVEGACIÓN PRINCIPAL -->
+  <nav class="github-nav">
+    <ul class="nav-list">
+      <li 
+        class="nav-item" 
+        *ngFor="let item of menuItems; trackBy: trackByMenuItem"
+        [class.active]="item.id === 'dashboard'"
+        [routerLink]="item.route">
+        
+        <div class="nav-icon">
+          <ng-container [ngSwitch]="item.id">
+            <!-- Dashboard -->
+            <svg *ngSwitchCase="'dashboard'" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M1.5 1.75V13.5h13.75a.75.75 0 010 1.5H.75a.75.75 0 01-.75-.75V1.75a.75.75 0 011.5 0zm14.28 2.53a.75.75 0 00-1.06-1.06L10 7.94 7.53 5.47a.75.75 0 00-1.06 0L3.22 8.72a.75.75 0 001.06 1.06L7 7.06l2.47 2.47a.75.75 0 001.06 0l5.25-5.25z"></path>
+            </svg>
+            <!-- Agenda -->
+            <svg *ngSwitchCase="'agenda'" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M4.75 0a.75.75 0 01.75.75V2h5V.75a.75.75 0 011.5 0V2h1.25c.966 0 1.75.784 1.75 1.75v10.5A1.75 1.75 0 0113.25 16H2.75A1.75 1.75 0 011 14.25V3.75C1 2.784 1.784 2 2.75 2H4V.75A.75.75 0 014.75 0zm0 3.5h8.5a.25.25 0 01.25.25V6h-11V3.75a.25.25 0 01.25-.25h2zm-2 4.25h11v6.5a.25.25 0 01-.25.25H2.75a.25.25 0 01-.25-.25v-6.5z"></path>
+            </svg>
+            <!-- Empresas -->
+            <svg *ngSwitchCase="'empresas'" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M1.75 16A1.75 1.75 0 010 14.25V1.75C0 .784.784 0 1.75 0h8.5C11.216 0 12 .784 12 1.75v12.5c0 .085-.006.168-.018.25h2.268a.25.25 0 00.25-.25V8.285a.25.25 0 00-.111-.208l-1.055-.703a.75.75 0 11.832-1.248l1.055.703c.487.325.779.871.779 1.456v5.965A1.75 1.75 0 0114.25 16h-2.5a.75.75 0 01-.197-.026c-.099.017-.2.026-.303.026h-8.5zM14.5 10.24v4.01c0 .138-.112.25-.25.25h-2.5a.25.25 0 01-.25-.25v-4.01c0-.138.112-.25.25-.25h2.5c.138 0 .25.112.25.25zm-4-9.49v12.5a.25.25 0 01-.25.25h-8.5a.25.25 0 01-.25-.25V.75a.25.25 0 01.25-.25h8.5a.25.25 0 01.25.25z"></path>
+            </svg>
+            <!-- Trabajadores -->
+            <svg *ngSwitchCase="'trabajadores'" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M8 0a5.53 5.53 0 00-3.594 1.342c-.766.66-1.321 1.52-1.464 2.383C1.266 4.095 0 5.555 0 7.318 0 9.366 1.708 11 3.781 11H7.5V9.5H3.781C2.516 9.5 1.5 8.444 1.5 7.318c0-1.025.787-1.87 1.78-1.87.402 0 .769.146 1.057.412.293.268.463.64.463 1.026v.019h1.5v-.019c0-.773-.377-1.474-.989-1.938.225-.26.378-.577.378-.938 0-.813-.425-1.554-1.125-1.964A4.003 4.003 0 018 1.5c.888 0 1.714.27 2.407.736.352.236.669.532.928.87.26.337.455.712.575 1.112.242.806.242 1.678 0 2.484-.12.4-.315.775-.575 1.112-.259.338-.576.634-.928.87A5.001 5.001 0 018 8.5c-.888 0-1.714-.27-2.407-.736a4.39 4.39 0 01-.928-.87 4.39 4.39 0 01-.575-1.112c-.242-.806-.242-1.678 0-2.484.12-.4.315-.775.575-1.112.259-.338.576-.634.928-.87A5.001 5.001 0 018 1.5zm3.594 6.842A6.506 6.506 0 0016 12.681C16 14.366 14.708 16 12.781 16H8.5v-1.5h4.281c1.265 0 2.281-1.056 2.281-2.182 0-1.025-.787-1.87-1.78-1.87-.402 0-.769.146-1.057.412-.293.268-.463.64-.463 1.026v.019h-1.5v-.019c0-.773.377-1.474.989-1.938z"></path>
+            </svg>
+            <!-- Liquidaciones -->
+            <svg *ngSwitchCase="'liquidaciones'" width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M1.5 2.75a.25.25 0 01.25-.25h12.5a.25.25 0 01.25.25v8.5a.25.25 0 01-.25.25H6.75a.75.75 0 00-.75.75v3.06l-3.22-3.22a.75.75 0 00-.53-.22H1.75a.25.25 0 01-.25-.25V2.75z"></path>
+            </svg>
+          </ng-container>
+        </div>
+        
+        <span class="nav-label" *ngIf="!isCollapsed">{{ item.label }}</span>
+        
+        <!-- Tooltip para modo colapsado -->
+        <div class="nav-tooltip" *ngIf="isCollapsed">
+          {{ item.label }}
+        </div>
+      </li>
+    </ul>
+    
+    <!-- Sección Recientes -->
+    <div class="nav-section" *ngIf="!isCollapsed">
+      <h3 class="section-title">Recientes</h3>
+      <ul class="nav-list recent-list">
+        <li class="nav-item recent-item">
+          <div class="nav-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8z"></path>
+            </svg>
+          </div>
+          <span class="nav-label">Liquidación Enero</span>
+        </li>
+        <li class="nav-item recent-item">
+          <div class="nav-icon">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+              <path d="M2 2.5A2.5 2.5 0 014.5 0h8.75a.75.75 0 01.75.75v12.5a.75.75 0 01-.75.75h-2.5a.75.75 0 110-1.5h1.75v-2h-8a1 1 0 00-.714 1.7.75.75 0 01-1.072 1.05A2.495 2.495 0 012 11.5v-9zm10.5-1V9h-8c-.356 0-.694.074-1 .208V2.5a1 1 0 011-1h8z"></path>
+            </svg>
+          </div>
+          <span class="nav-label">Empleados Nuevos</span>
+        </li>
+      </ul>
+    </div>
   </nav>
+
+  <!-- FOOTER USUARIO -->
+  <div class="github-footer">
+    <div class="user-profile">
+      <div class="user-avatar-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M8 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H3s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C11.516 10.68 10.289 10 8 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"></path>
+        </svg>
+      </div>
+      
+      <div class="user-info" *ngIf="!isCollapsed">
+        <div class="user-name">Administrador</div>
+        <div class="user-status">🟢 Activo</div>
+      </div>
+      
+      <button class="user-menu-btn" *ngIf="!isCollapsed">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+          <path d="M4.427 7.427l3.396 3.396a.25.25 0 00.354 0l3.396-3.396A.25.25 0 0011.396 7H4.604a.25.25 0 00-.177.427z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Overlay para móvil -->
+<div 
+  class="sidebar-overlay" 
+  *ngIf="!isHidden && isMobile"
+  (click)="hide()"
+  aria-label="Cerrar menú">
 </div>

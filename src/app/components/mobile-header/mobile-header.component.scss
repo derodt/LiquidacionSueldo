@@ -1,0 +1,223 @@
+// ================================
+// HEADER MÓVIL ESTILO GITHUB
+// ================================
+
+.mobile-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: #ffffff;
+  border-bottom: 1px solid #d1d9e0;
+  z-index: 998; // Debajo del sidebar pero encima del contenido
+  display: flex;
+  align-items: center;
+  box-shadow: 0 1px 3px rgba(149, 157, 165, 0.1);
+  
+  // Solo visible en móvil
+  @media (min-width: 769px) {
+    display: none;
+  }
+}
+
+.header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 16px;
+  max-width: 100%;
+}
+
+// ================================
+// BOTÓN MENÚ HAMBURGER
+// ================================
+
+.menu-btn {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #d1d9e0;
+  background: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #656d76;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  flex-shrink: 0;
+  
+  &:hover {
+    background: #f6f8fa;
+    color: #1f2328;
+    border-color: #afb8c1;
+  }
+  
+  &:active {
+    background: #eef4fd;
+    color: #0969da;
+    border-color: #0969da;
+  }
+  
+  &:focus-visible {
+    outline: 2px solid #0969da;
+    outline-offset: 2px;
+  }
+  
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+// ================================
+// TÍTULO DE PÁGINA
+// ================================
+
+.page-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2328;
+  margin: 0;
+  flex: 1;
+  text-align: left; // Alineado a la izquierda
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 12px;
+  line-height: 1.2;
+}
+
+// ================================
+// ACCIONES DEL HEADER
+// ================================
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.action-btn {
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: none;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #656d76;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+  
+  &:hover {
+    background: #f6f8fa;
+    color: #1f2328;
+  }
+  
+  &:active {
+    background: #eef4fd;
+    color: #0969da;
+  }
+  
+  &:focus-visible {
+    outline: 2px solid #0969da;
+    outline-offset: 2px;
+  }
+  
+  svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+// ================================
+// ESTADOS ESPECIALES
+// ================================
+
+// Animación de aparición
+.mobile-header {
+  animation: slideDownHeader 0.2s ease-out;
+}
+
+@keyframes slideDownHeader {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// ================================
+// VARIANTES DE TEMA
+// ================================
+
+// Asegurar tema claro siempre
+.mobile-header {
+  background: #ffffff !important;
+  border-bottom-color: #d1d9e0 !important;
+  
+  .menu-btn,
+  .action-btn {
+    color: #656d76 !important;
+    
+    &:hover {
+      background: #f6f8fa !important;
+      color: #1f2328 !important;
+    }
+    
+    &:active {
+      background: #eef4fd !important;
+      color: #0969da !important;
+    }
+  }
+  
+  .page-title {
+    color: #1f2328 !important;
+  }
+}
+
+// ================================
+// RESPONSIVE AJUSTES
+// ================================
+
+@media (max-width: 480px) {
+  .header-container {
+    padding: 0 12px;
+  }
+  
+  .page-title {
+    font-size: 15px;
+    padding: 0 8px;
+  }
+  
+  .menu-btn,
+  .action-btn {
+    width: 36px;
+    height: 36px;
+    
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+// ================================
+// ESPACIO PARA CONTENIDO PRINCIPAL
+// ================================
+
+// Esta clase se debe aplicar al contenido principal cuando el header esté visible
+.mobile-header-offset {
+  padding-top: 56px;
+  
+  @media (min-width: 769px) {
+    padding-top: 0;
+  }
+}

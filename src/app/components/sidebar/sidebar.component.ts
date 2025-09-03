@@ -1,163 +1,173 @@
-import { Component, inject, OnDestroy, OnInit, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatListModule } from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Router, NavigationEnd, RouterModule } from '@angular/router';
+import { filter, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { SidebarService } from '../../services/sidebar.service';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatSidenavModule,
-    MatListModule,
-    MatIconModule,
-    MatButtonModule,
-    MatToolbarModule,
-    MatTooltipModule
-  ],
+  imports: [CommonModule, RouterModule],
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit, OnDestroy {
-  public router = inject(Router);
   
-  isCollapsed = false;
   isMobile = false;
+  isCollapsed = false;
+  isHidden = false;
   activeRoute = '';
   private resizeTimeout: any;
+  private destroy$ = new Subject<void>();
 
   menuItems = [
     {
-      icon: 'group',
+      id: 'dashboard',
+      icon: 'dashboard',
+      label: 'Dashboard',
+      description: 'Panel de control',
+      route: '/dashboard'
+    },
+    {
+      id: 'trabajadores',
+      icon: 'trabajadores',
       label: 'Trabajadores',
-      route: '/trabajadores',
-      description: 'Gestión de empleados'
+      description: 'Gestión de personal',
+      route: '/trabajadores'
     },
     {
-      icon: 'receipt_long',
-      label: 'Liquidaciones',
-      route: '/liquidaciones',
-      description: 'Cálculo de sueldos'
+      id: 'liquidaciones',
+      icon: 'liquidaciones',
+      label: 'Liquidaciones', 
+      description: 'Cálculo de sueldos',
+      route: '/liquidaciones'
     },
     {
-      icon: 'business',
+      id: 'empresas',
+      icon: 'empresas',
       label: 'Empresas',
-      route: '/empresas',
-      description: 'Administración empresarial'
+      description: 'Gestión de empresas',
+      route: '/empresas'
     },
     {
-      icon: 'calendar_today',
+      id: 'agenda',
+      icon: 'agenda',
       label: 'Agenda',
-      route: '/agenda',
-      description: 'Planificación de turnos'
+      description: 'Calendario y turnos',
+      route: '/agenda'
     }
   ];
 
-  constructor() {
+  constructor(private router: Router, private sidebarService: SidebarService) {
     this.checkScreenSize();
     this.setActiveRoute();
-    
-    // En desktop, mostrar el sidebar por defecto
-    if (!this.isMobile) {
-      this.isCollapsed = false;
-    }
+    this.updateSidebarService();
   }
 
   ngOnInit() {
-    // Escuchar cambios de ruta
     this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
+      filter(event => event instanceof NavigationEnd),
+      takeUntil(this.destroy$)
     ).subscribe(() => {
       this.setActiveRoute();
     });
+
+    // Escuchar cambios del servicio sidebar
+    this.sidebarService.sidebarState$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(state => {
+      // Solo actualizar si viene del servicio (no del propio componente)
+      if (state.isHidden !== this.isHidden) {
+        this.isHidden = state.isHidden;
+      }
+      if (state.isCollapsed !== this.isCollapsed) {
+        this.isCollapsed = state.isCollapsed;
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+    if (this.resizeTimeout) {
+      clearTimeout(this.resizeTimeout);
+    }
   }
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
-    // Debounce para optimizar rendimiento
     clearTimeout(this.resizeTimeout);
     this.resizeTimeout = setTimeout(() => {
       this.checkScreenSize();
     }, 150);
   }
 
+  private checkScreenSize() {
+    const previousMobile = this.isMobile;
+    this.isMobile = window.innerWidth <= 768;
+    
+    if (this.isMobile) {
+      // En móvil: ocultar el sidebar por defecto
+      this.isHidden = true;
+      this.isCollapsed = false; // Cuando se muestre en móvil, debe estar expandido
+    } else if (previousMobile && !this.isMobile) {
+      // Al cambiar de móvil a desktop: mostrar y expandir
+      this.isHidden = false;
+      this.isCollapsed = false;
+    }
+    
+    this.updateSidebarService();
+  }
+
   private setActiveRoute() {
     this.activeRoute = this.router.url;
   }
 
-  checkScreenSize() {
-    const previousMobile = this.isMobile;
-    this.isMobile = window.innerWidth <= 768;
-    
-    // Si cambió de desktop a móvil, colapsar automáticamente
-    if (!previousMobile && this.isMobile) {
-      this.isCollapsed = true;
-    }
-    // Si cambió de móvil a desktop, expandir automáticamente
-    else if (previousMobile && !this.isMobile) {
-      this.isCollapsed = false;
-      this.closeSidebar(); // Limpiar estilos de móvil
-    }
+  // Métodos para GitHub style
+  toggleCollapse() {
+    this.isCollapsed = !this.isCollapsed;
+    this.updateSidebarService();
   }
 
+  hide() {
+    this.isHidden = true;
+    this.updateSidebarService();
+  }
+
+  show() {
+    this.isHidden = false;
+    this.updateSidebarService();
+  }
+
+  // Métodos legacy para compatibilidad
   toggleSidebar() {
-    this.isCollapsed = !this.isCollapsed;
-    
-    // En móvil, controlar el scroll del body
-    this.updateBodyScrollState();
+    this.toggleCollapse();
+  }
+
+  hideSidebar() {
+    this.hide();
+  }
+
+  private updateSidebarService() {
+    this.sidebarService.updateSidebarState(this.isHidden, this.isCollapsed);
   }
 
   navigateTo(route: string) {
     this.router.navigate([route]);
-    
-    // En móvil, cerrar el menú después de navegar
-    if (this.isMobile) {
-      setTimeout(() => {
-        this.closeSidebar();
-      }, 100);
-    }
-  }
-
-  closeSidebar() {
-    if (this.isMobile) {
-      this.isCollapsed = true;
-    }
-    this.updateBodyScrollState();
-  }
-
-  private updateBodyScrollState() {
-    if (this.isMobile) {
-      if (!this.isCollapsed) {
-        document.body.classList.add('sidebar-open');
-        document.body.style.overflow = 'hidden';
-      } else {
-        document.body.classList.remove('sidebar-open');
-        document.body.style.overflow = '';
-      }
-    } else {
-      document.body.classList.remove('sidebar-open');
-      document.body.style.overflow = '';
-    }
   }
 
   isRouteActive(route: string): boolean {
     return this.activeRoute === route || this.activeRoute.startsWith(route + '/');
   }
-  
-  ngOnDestroy() {
-    // Limpiar estilos del body al destruir el componente
-    document.body.classList.remove('sidebar-open');
-    document.body.style.overflow = '';
-    
-    // Limpiar timeout
-    if (this.resizeTimeout) {
-      clearTimeout(this.resizeTimeout);
-    }
+
+  // TrackBy para GitHub style
+  trackByMenuItem(index: number, item: any): string {
+    return item.id;
+  }
+
+  // TrackBy legacy para compatibilidad
+  trackByRoute(index: number, item: any): string {
+    return item.route;
   }
 }
